@@ -1,0 +1,3 @@
+1，先运行gradle  dependencies 得到项目所有的依赖关系放在sdkdepens.txt里面
+2, DependenceService.java中配置本地仓库地址
+2, 运行DependenceService.java会将所有依赖的协议信息输出到sdkresult.txt和控制台（从本地仓库的pom文件读取license）
