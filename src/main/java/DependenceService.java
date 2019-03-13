@@ -21,7 +21,7 @@ public class DependenceService {
     private static final String CURRENT_DIR = System.getProperty("user.dir") + File.separator;//根目录
     private static final String sdkdepens_path = CURRENT_DIR + "sdkdepens.txt";//被检测的依赖文件（默认在根目录）
     private static final String sdkresult_path = CURRENT_DIR + "sdkresult.txt";//检测结果
-    private static final String gradle_repositories_path = "E:\\repository_gradle\\caches\\modules-2\\files-2.1";//gradle的本地maven仓库
+    private static final String gradle_repositories_path = "H:\\.gradle\\caches\\modules-2\\files-2.1";//gradle的本地maven仓库
     private static Map<String, Set<String>> jarMap = new HashMap<>();//所有的jar
     private static Set<String> jarHadNotpom = new TreeSet<>();//在本地仓库没找到pom文件的jar
 
@@ -40,24 +40,14 @@ public class DependenceService {
                 String jarName = strs[1];
                 jarName = jarName.replaceAll("\\(\\*\\)", "").trim();
                 if (jarName.contains("->")) {
-                    //如果有"->"标志，则高低两个版本都获取license
+                    //如果有"->"标志，则只获取高版本license
                     jarName = jarName.replaceAll(" ", "");
                     int subIndex = jarName.indexOf("->");
                     String jarVersionUpper = jarName.substring(subIndex + 2);
-
-                    //获取低版本开源协议
-                    String jarNameLower = jarName.substring(0, subIndex);
-                    putJarLicense2Map(jarNameLower, getLicense(jarNameLower));
-
-                    //获取高版本开源协议
-
-                    String jarNameUpper = jarName.substring(0, jarName.lastIndexOf(":") + 1) + jarVersionUpper;
-                    putJarLicense2Map(jarNameUpper, getLicense(jarNameUpper));
-
-                } else {
-                    //获取开源协议
-                    putJarLicense2Map(jarName, getLicense(jarName));
+                    jarName = jarName.substring(0, jarName.lastIndexOf(":") + 1) + jarVersionUpper;
                 }
+                //获取开源协议
+                putJarLicense2Map(jarName, getLicense(jarName));
             }
         }
 
